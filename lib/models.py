@@ -1,6 +1,8 @@
-from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
+from sqlalchemy import ForeignKey, Column, Integer, String, MetaData, create_engine
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+
+engine= create_engine('sqlite:///freebies.db')
 
 convention = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
