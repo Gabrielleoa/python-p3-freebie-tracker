@@ -18,8 +18,18 @@ class Company(Base):
     name = Column(String())
     founding_year = Column(Integer())
 
+    freebies = relationship('Freebie', backref='company')
+    devs= relationship('Dev')
+
+    def give_freebie(self, dev, name, session):
+        freebie = Freebie(name=name, dev=dev, company=self)
+        session.add(freebie)
+        session.commit()
+
     def __repr__(self):
-        return f'<Company {self.name}>'
+        return f'<Company {self.name}>' \
+            + f"{self.founding_year}"
+        
 
 class Dev(Base):
     __tablename__ = 'devs'
@@ -27,5 +37,31 @@ class Dev(Base):
     id = Column(Integer(), primary_key=True)
     name= Column(String())
 
+    freebies = relationship('Freebie', backref='dev')
+    companies = relationship('Company')
+
+    def give_away(self, dev, freebie , session):
+        if freebie.dev ==self:
+            freebie.dev ==dev
+            session.commit()
+
     def __repr__(self):
         return f'<Dev {self.name}>'
+class Freebie(Base):
+    __tablename__='freebies'
+
+    id= Column(Integer(), primary_key=True)
+    name= Column(String())
+
+    Dev_id= Column(Integer(), ForeignKey('devs.id'))
+    Company_id= Column(Integer, ForeignKey('companies.id'))
+
+    dev = relationship('Dev', backref='freebies')
+    company = relationship('Company', backref='freebies')
+    
+    print_details=print(f'{dev.name}' "owns a" f'{name}' "from"f'{company.name}' )
+
+    
+
+Freebie.print_details()
+ 
